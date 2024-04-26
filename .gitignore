@@ -52,3 +52,6 @@ MANIFEST
 
 # Per-project virtualenvs
 .venv*/
+
+# Test generated files & folders
+spot/
