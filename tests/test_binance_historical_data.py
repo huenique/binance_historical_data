@@ -1,9 +1,3 @@
-
-
-
-def test_import():
-    from binance_historical_data import BinanceDataDumper
-
 def test_main_class_init():
     from binance_historical_data import BinanceDataDumper
 
@@ -22,7 +16,7 @@ def test_main_class_init():
     )
 
     data_dumper.dump_data(
-        tickers='BTCUSDT',
+        tickers="BTCUSDT",
         date_start=None,
         date_end=None,
         is_to_update_existing=False,
