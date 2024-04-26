@@ -118,6 +118,22 @@ class BinanceDataDumper:
         self._asset_class = asset_class
         self._data_type = data_type
 
+    # property method
+    @property
+    def data_type(self):
+        """Return data type"""
+        return self._data_type
+
+    @property
+    def data_frequency(self):
+        """Return data frequency"""
+        return self._data_frequency
+
+    @property
+    def asset_class(self):
+        """Return asset class"""
+        return self._asset_class
+
     def dump_data(
         self,
         tickers: str | None = None,
