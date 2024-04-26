@@ -2,12 +2,12 @@
 binance_historical_data
 ========================
 
-.. image:: https://img.shields.io/github/last-commit/stas-prokopiev/binance_historical_data
-   :target: https://img.shields.io/github/last-commit/stas-prokopiev/binance_historical_data
+.. image:: https://img.shields.io/github/last-commit/huenique/binance_historical_data
+   :target: https://img.shields.io/github/last-commit/huenique/binance_historical_data
    :alt: GitHub last commit
 
-.. image:: https://img.shields.io/github/license/stas-prokopiev/binance_historical_data
-    :target: https://github.com/stas-prokopiev/binance_historical_data/blob/master/LICENSE.txt
+.. image:: https://img.shields.io/github/license/huenique/binance_historical_data
+    :target: https://github.com/huenique/binance_historical_data/blob/master/LICENSE.txt
     :alt: GitHub license<space><space>
 
 .. image:: https://img.shields.io/pypi/v/binance_historical_data
@@ -21,22 +21,15 @@ binance_historical_data
 
 .. contents:: **Table of Contents**
 
-Short Overview.
+Overview
 =========================
-binance_historical_data is a python package (**py>=3.8**)
-which makes download of historical crypto data (prices and volumes) from binance server as simple as it can only be.
-**You don't even need to have an account at binance.com to download all history of crypto data**
+`binance_historical_data` is a Python package designed to simplify the download of historical cryptocurrency data (prices and volumes) from the Binance server. Notably, you can download all historical data without needing an account on binance.com.
 
-| Data is taken from here: https://data.binance.vision/?prefix=data/
-| Dumped locally and then unzipped,
-| so you would have an identical local ready to use data copy
+Data is sourced from Binance Data Vision, where it is dumped locally and unzipped, providing you with a ready-to-use local copy.
 
-| Using this package you will be able to have full historical data of prices and volumes with only 3 lines of python code
-| And if you need to update already downloaded data then once again 3 lines of python code will do the job
+Using this package, you can access comprehensive historical data on prices and volumes with just three lines of Python code. Additionally, updating already downloaded data requires only another three lines of code.
 
-
-| **Limitations**: The previous day data appears on binance server a few minutes after 0 a.m. UTC
-| So there is a delay in which you can get the data.
+Limitations: Data from the previous day is only available on the Binance server a few minutes after 0:00 AM UTC, which introduces a delay in data availability.
 
 Installation via pip:
 ======================
