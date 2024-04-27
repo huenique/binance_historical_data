@@ -13,14 +13,9 @@ from collections import Counter, defaultdict
 from urllib import error
 
 from dateutil.relativedelta import relativedelta
-from mpire import WorkerPool
-
-# Third party imports
+from mpire.pool import WorkerPool
 from tqdm.auto import tqdm
 
-# Local imports
-
-# Global constants
 LOGGER = logging.getLogger(__name__)
 
 
@@ -118,19 +113,18 @@ class BinanceDataDumper:
         self._asset_class = asset_class
         self._data_type = data_type
 
-    # property method
     @property
-    def data_type(self):
+    def data_type(self) -> str:
         """Return data type"""
         return self._data_type
 
     @property
-    def data_frequency(self):
+    def data_frequency(self) -> str:
         """Return data frequency"""
         return self._data_frequency
 
     @property
-    def asset_class(self):
+    def asset_class(self) -> str:
         """Return asset class"""
         return self._asset_class
 
@@ -142,7 +136,7 @@ class BinanceDataDumper:
         is_to_update_existing: bool = False,
         int_max_tickers_to_get: int | None = None,
         tickers_to_exclude: list[str] | None = None,
-    ):
+    ) -> None:
         """Main method to dump new of update existing historical data
 
         Args:
@@ -231,7 +225,7 @@ class BinanceDataDumper:
             map(lambda symbol: symbol["symbol"], json.loads(response)["symbols"])
         )
 
-    def _get_list_all_available_files(self, prefix: str = ""):
+    def _get_list_all_available_files(self, prefix: str = "") -> list[str | None]:
         """Get all available files from the binance servers"""
         url = (
             os.path.join(self._base_url, prefix)
@@ -266,7 +260,7 @@ class BinanceDataDumper:
         else:
             raise ValueError("BUCKET_URL not found")
 
-    def get_min_start_date_for_ticker(self, ticker: str):
+    def get_min_start_date_for_ticker(self, ticker: str) -> datetime.date:
         """Get minimum start date for ticker"""
         path_folder_prefix = self._get_path_suffix_to_dir_with_data("monthly", ticker)
         min_date = datetime.datetime(
@@ -307,7 +301,7 @@ class BinanceDataDumper:
 
         return min_date.date()
 
-    def get_local_dir_to_data(self, ticker: str, timeperiod_per_file: str):
+    def get_local_dir_to_data(self, ticker: str, timeperiod_per_file: str) -> str:
         """Path to directory where ticker data is saved
 
         Args:
@@ -328,7 +322,7 @@ class BinanceDataDumper:
         date_obj: datetime.date,
         timeperiod_per_file: str = "monthly",
         extension: str = "csv",
-    ):
+    ) -> str:
         """Create file name in the format it's named on the binance server"""
 
         if timeperiod_per_file == "monthly":
@@ -340,7 +334,7 @@ class BinanceDataDumper:
 
     def get_all_dates_with_data_for_ticker(
         self, ticker: str, timeperiod_per_file: str = "monthly"
-    ):
+    ) -> list[datetime.date]:
         """Get list with all dates for which there is saved data
 
         Args:
@@ -377,7 +371,9 @@ class BinanceDataDumper:
 
         return list_dates_with_data
 
-    def get_all_tickers_with_data(self, timeperiod_per_file: str = "daily"):
+    def get_all_tickers_with_data(
+        self, timeperiod_per_file: str = "daily"
+    ) -> list[str]:
         """Get all tickers for which data was dumped
 
         Args:
@@ -396,7 +392,7 @@ class BinanceDataDumper:
         ]
         return tickers
 
-    def delete_outdated_daily_results(self):
+    def delete_outdated_daily_results(self) -> None:
         """
         Deleta daily data for which full month monthly data was already dumped
         """
@@ -444,7 +440,7 @@ class BinanceDataDumper:
         date_end: datetime.date | None = None,
         timeperiod_per_file: str = "monthly",
         is_to_update_existing: bool = False,
-    ):
+    ) -> None:
         """Dump data for 1 ticker"""
         min_start_date = self.get_min_start_date_for_ticker(ticker)
         LOGGER.debug(
@@ -522,7 +518,7 @@ class BinanceDataDumper:
         ticker: str,
         date_obj: datetime.date,
         timeperiod_per_file: str = "monthly",
-    ):
+    ) -> datetime.date | None:
         """Dump data for 1 ticker for 1 data"""
         # 1) Create path to file to save
         path_folder_suffix = self._get_path_suffix_to_dir_with_data(
@@ -564,7 +560,9 @@ class BinanceDataDumper:
             return None
         return date_obj
 
-    def _get_path_suffix_to_dir_with_data(self, timeperiod_per_file: str, ticker: str):
+    def _get_path_suffix_to_dir_with_data(
+        self, timeperiod_per_file: str, ticker: str
+    ) -> str:
         """_summary_
 
         Args:
@@ -588,7 +586,9 @@ class BinanceDataDumper:
         return folder_path
 
     @staticmethod
-    def _download_raw_file(str_url_path_to_file: str, str_path_where_to_save: str):
+    def _download_raw_file(
+        str_url_path_to_file: str, str_path_where_to_save: str
+    ) -> typing.Literal[0, 1]:
         """Download file from binance server by URL"""
 
         LOGGER.debug("Download file from: %s", str_url_path_to_file)
@@ -624,7 +624,7 @@ class BinanceDataDumper:
             return 0
         return 1
 
-    def _print_dump_statistics(self):
+    def _print_dump_statistics(self) -> None:
         """Print the latest dump statistics"""
         LOGGER.info(
             "Tried to dump data for %d tickers:",
@@ -635,7 +635,7 @@ class BinanceDataDumper:
         else:
             self._print_short_dump_statististics()
 
-    def _print_full_dump_statististics(self):
+    def _print_full_dump_statististics(self) -> None:
         """"""
         for ticker in self.dict_new_points_saved_by_ticker:
             dict_stats = self.dict_new_points_saved_by_ticker[ticker]
@@ -646,7 +646,7 @@ class BinanceDataDumper:
                 dict_stats.get("daily", 0),
             )
 
-    def _print_short_dump_statististics(self):
+    def _print_short_dump_statististics(self) -> None:
         """"""
         # Gather stats
         int_non_empty_dump_res = 0
@@ -689,7 +689,7 @@ class BinanceDataDumper:
         self,
         tickers: str | None = None,
         tickers_to_exclude: list[str] | None = None,
-    ):
+    ) -> list[str]:
         """
         Create list of tickers for which to get data (by default all **USDT)
         """
@@ -718,7 +718,7 @@ class BinanceDataDumper:
         date_start: datetime.date,
         date_end: datetime.date | None = None,
         timeperiod_per_file: str = "monthly",
-    ):
+    ) -> list[datetime.date]:
         """Create list dates with asked frequency for [date_start, date_end]"""
         list_dates: list[datetime.date] = []
         if date_end is None:
